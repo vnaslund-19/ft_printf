@@ -103,6 +103,7 @@ int	ft_printf(const char *format, ...)
 {
 	va_list	args;
 	int		count;
+	int		tmp_count;
 
 	va_start(args, format);
 	count = 0;
@@ -110,15 +111,18 @@ int	ft_printf(const char *format, ...)
 	{
 		if (*format == '%')
 		{
-			count += format_print(*(++format), args);
-			if (count == -1)
+			tmp_count = format_print(*(++format), args);
+			if (tmp_count == -1)
 				return (-1);
+			else
+				count += tmp_count;
 		}
 		else
 		{
-			count += write(1, format, 1);
-			if (count == -1)
+			if (write(1, format, 1) == -1)
 				return (-1);
+			else
+				count++;
 		}
 		format++;
 	}
