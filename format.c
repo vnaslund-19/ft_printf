@@ -36,6 +36,7 @@ int	print_s(char *str)
 int	print_i(long num)
 {
 	int		count;
+	int		tmp_count;
 
 	count = 0;
 	if (num < 0)
@@ -47,11 +48,14 @@ int	print_i(long num)
 	}
 	if (num > 9)
 	{
-		count += print_i(num / 10);
-		if (count == -1)
+		tmp_count = print_i(num / 10);
+		if (tmp_count == -1)
 			return (-1);
+		count += tmp_count;
 	}
-	count += print_c(num % 10 + 48);
+	if (print_c(num % 10 + 48) == -1)
+		return (-1);
+	count++;
 	return (count);
 }
 
@@ -73,6 +77,8 @@ int	print_x(long num)
 		if (count == -1)
 			return (-1);
 	}
-	count += print_c(symbols[unum % 16]);
+	if (print_c(symbols[unum % 16]) == -1)
+		return (-1);
+	count++;
 	return (count);
 }

@@ -29,24 +29,30 @@ int	print_upx(long num)
 		if (count == -1)
 			return (-1);
 	}
-	count += print_c(symbols[unum % 16]);
+	if (print_c(symbols[unum % 16]) == -1)
+		return (-1);
+	count++;
 	return (count);
 }
 
 int	print_u(long num)
 {
 	int		count;
+	int		tmp_count;
 
 	count = 0;
 	if (num < 0)
 		num = (unsigned int)num;
 	if (num > 9)
 	{
-		count += print_i(num / 10);
-		if (count == -1)
+		tmp_count = print_i(num / 10);
+		if (tmp_count == -1)
 			return (-1);
+		count += tmp_count;
 	}
-	count += print_c(num % 10 + 48);
+	if (print_c(num % 10 + 48) == -1)
+		return (-1);
+	count++;
 	return (count);
 }
 
@@ -54,6 +60,7 @@ int	print_p(uintptr_t num)
 {
 	char			*symbols;
 	int				count;
+	int				tmp_count;
 
 	count = 0;
 	symbols = "0123456789abcdef";
@@ -65,11 +72,14 @@ int	print_p(uintptr_t num)
 	}
 	else
 	{
-		count += write(1, "0x", 2);
-		if (count == -1)
+		tmp_count = write(1, "0x", 2);
+		if (tmp_count == -1)
 			return (-1);
+		count += tmp_count;
 	}
-	count += print_c(symbols[num % 16]);
+	if (print_c(symbols[num % 16]) == -1)
+		return (-1);
+	count++;
 	return (count);
 }
 
@@ -114,15 +124,13 @@ int	ft_printf(const char *format, ...)
 			tmp_count = format_print(*(++format), args);
 			if (tmp_count == -1)
 				return (-1);
-			else
-				count += tmp_count;
+			count += tmp_count;
 		}
 		else
 		{
 			if (write(1, format, 1) == -1)
 				return (-1);
-			else
-				count++;
+			count++;
 		}
 		format++;
 	}
